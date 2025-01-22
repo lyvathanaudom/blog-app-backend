@@ -13,7 +13,11 @@ app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
     next();
 });
-
+app.use(basicAuth({
+    users: { [process.env.BASIC_AUTH_USER]: process.env.BASIC_AUTH_PASSWORD },
+    challenge: true,
+    unauthorizedResponse: 'Unauthorized access. Please provide valid credentials.'
+}));
 app.get("/", (req, res) => {
     res.send("success");
 });
