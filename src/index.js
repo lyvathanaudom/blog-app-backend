@@ -1,12 +1,24 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
+const cors = require('cors');
 const basicAuth = require('express-basic-auth');
 const postsRoute = require('./routes/posts');
 dotenv.config();
 
 const app = express();
-
+// CORS configuration
+const corsOptions = {
+    origin: 'http://localhost:3000', // Replace with your Vue frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 200
+  };
+  
+  // Apply CORS middleware
+  app.use(cors(corsOptions));
+  
 app.use(express.json());
 app.use(helmet())
 app.use((req, res, next) => {
