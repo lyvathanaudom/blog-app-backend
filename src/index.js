@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 // CORS configuration
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://leearchive.vercel.app/"],
+  origin: ['http://localhost:3000', 'https://leearchive.vercel.app/'],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
