@@ -7,17 +7,29 @@ const postsRoute = require("./routes/posts");
 dotenv.config();
 
 const app = express();
-// CORS configuration
+const whitelist = [
+  'http://localhost:3000',
+  'https://leearchive.vercel.app' // No trailing slash!
+];
+
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://leearchive.vercel.app/'],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   credentials: true,
-  optionsSuccessStatus: 200,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
 
+// Apply CORS before any routes
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options('*', cors(corsOptions)); 
 
 app.use(express.json());
 app.use(helmet());
