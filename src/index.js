@@ -7,9 +7,14 @@ const postsRoute = require("./routes/posts");
 dotenv.config();
 
 const app = express();
+
+// 1. Security headers first
+app.use(helmet());
+
+// 2. CORS configuration
 const whitelist = [
   'http://localhost:3000',
-  'https://leearchive.vercel.app' // No trailing slash!
+  'https://leearchive.vercel.app' // No trailing slash
 ];
 
 const corsOptions = {
@@ -23,34 +28,33 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   credentials: true,
-  preflightContinue: false,
   optionsSuccessStatus: 204
 };
 
-// Apply CORS before any routes
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+app.options('*', cors(corsOptions)); // Handle preflight for all routes
 
+// 3. Basic authentication for protected routes only
+const authMiddleware = basicAuth({
+  users: { [process.env.BASIC_AUTH_USER]: process.env.BASIC_AUTH_PASSWORD },
+  challenge: true,
+  unauthorizedResponse: "Unauthorized access. Please provide valid credentials."
+});
+
+// 4. Regular middleware
 app.use(express.json());
-app.use(helmet());
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
 });
-app.use(
-  basicAuth({
-    users: { [process.env.BASIC_AUTH_USER]: process.env.BASIC_AUTH_PASSWORD },
-    challenge: true,
-    unauthorizedResponse:
-      "Unauthorized access. Please provide valid credentials.",
-  })
-);
+
+// 5. Public routes
 app.get("/", (req, res) => {
-  res.send("success");
+  res.send("API Server Running");
 });
 
-// Use the posts route
-app.use("/api/posts", postsRoute);
+// 6. Protected routes with authentication
+app.use("/api/posts", authMiddleware, postsRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
