@@ -1,4 +1,3 @@
-const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
 class Post {
@@ -11,7 +10,7 @@ class Post {
         this.content = data.content || '';
         this.tag = data.tag || {};
         this.updated_at = data.updated_at || new Date().toISOString();
-        this.published = data.published || false;
+        this.author = data.author || 'Anonymous'; // Added author property
         this.slug = data.slug || this.generateSlug(data.title);
     }
 
@@ -46,7 +45,7 @@ class Post {
             content: this.content,
             tag: this.tag,
             updated_at: this.updated_at,
-            published: this.published,
+            author: this.author, // Include author in JSON output
             slug: this.slug
         };
     }
