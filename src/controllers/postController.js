@@ -6,7 +6,7 @@ exports.getAllPosts = async (req, res) => {
         console.log('Fetching posts from database...');
         const { data, error } = await supabase
             .from('posts')
-            .select('id, created_at, title, slug, date, cover, content, tag, author') // Added author
+            .select('id, created_at, title, slug, date, cover, content, tag, author')
             .order('created_at', { ascending: false });
 
         if (error) {
@@ -23,7 +23,7 @@ exports.getAllPosts = async (req, res) => {
             cover: post.cover || null,
             content: post.content,
             tag: post.tag || {},
-            author: post.author || 'Anonymous' // Added author
+            author: post.author || 'Anonymous'
         }));
 
         console.log(`Successfully fetched ${formattedPosts.length} posts`);
@@ -68,7 +68,7 @@ exports.getPostBySlug = async (req, res) => {
 // Create new post
 exports.createPost = async (req, res) => {
     try {
-        const { title, content, slug, date, cover, tag, author } = req.body; // Added author
+        const { title, content, slug, date, cover, tag, author } = req.body; 
         console.log('Creating new post...');
 
         const { data, error } = await supabase
@@ -81,7 +81,7 @@ exports.createPost = async (req, res) => {
                     date,
                     cover,
                     tag,
-                    author // Added author
+                    author
                 }
             ])
             .select()
@@ -105,7 +105,7 @@ exports.createPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, content, slug, date, cover, tag, author } = req.body; // Added author
+        const { title, content, slug, date, cover, tag, author } = req.body;
         console.log(`Updating post with ID: ${id}`);
 
         const { data, error } = await supabase
@@ -117,7 +117,7 @@ exports.updatePost = async (req, res) => {
                 date,
                 cover,
                 tag,
-                author // Added author
+                author
             })
             .eq('id', id)
             .select()
