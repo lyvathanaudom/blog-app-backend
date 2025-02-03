@@ -2,7 +2,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const cors = require("cors");
-// const basicAuth = require("express-basic-auth");
 const postsRoute = require("./routes/posts");
 const authRoutes = require('./routes/auth');
 dotenv.config();
@@ -13,7 +12,8 @@ app.use(helmet());
 
 const whitelist = [
   'http://localhost:3000',
-  'https://leearchive.vercel.app'
+  'https://leearchive.vercel.app',
+  'https://blog-admin-ui-blush.vercel.app'
 ];
 
 const corsOptions = {
