@@ -50,7 +50,7 @@ app.get('/health', (req, res) => res.send('OK'));
 
 // Self-ping (runs every 10 mins)
 setInterval(() => {
-  fetch('https://https://leearchive.vercel.app').catch(console.error);
+  fetch('https://leearchive.vercel.app').catch(console.error);
 }, 600_000);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
